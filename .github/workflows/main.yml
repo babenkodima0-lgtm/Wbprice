@@ -1,0 +1,43 @@
+name: WB price tracker
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # каждые 15 минут
+  workflow_dispatch:          # кнопка ручного запуска
+
+permissions:
+  contents: write             # нужно, чтобы сохранять prices.json в репозиторий
+
+concurrency:
+  group: wb-tracker
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - name: Run tracker
+        env:
+          RUN_ONCE: "1"
+          WB_DEST: "123585931"   # Ханты-Мансийск
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          WB_SELLER_ID: ${{ secrets.WB_SELLER_ID }}
+          MIN_CHANGE_PCT: "1"
+        run: python wb_price_tracker.py
+
+      - name: Save prices
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add prices.json
+          git diff --staged --quiet || (git commit -m "update prices" && git push)
