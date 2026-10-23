@@ -22,7 +22,23 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          
+      - name: Check public seller page
+        run: |
+          python - <<'PY'
+          import requests
 
+          url = "https://www.wildberries.ru/seller/25577"
+          r = requests.get(
+              url,
+              headers={"User-Agent": "Mozilla/5.0"},
+              timeout=20,
+          )
+          print("HTTP status:", r.status_code)
+          print("HTML length:", len(r.text))
+          print("Contains seller ID:", "25577" in r.text)
+          PY
+          
       - run: pip install requests
 
       - name: Run tracker
