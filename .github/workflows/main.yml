@@ -1,12 +1,13 @@
+
 name: WB price tracker
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # каждые 15 минут
-  workflow_dispatch:          # кнопка ручного запуска
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
 
 permissions:
-  contents: write             # нужно, чтобы сохранять prices.json в репозиторий
+  contents: write
 
 concurrency:
   group: wb-tracker
@@ -25,10 +26,29 @@ jobs:
 
       - run: pip install requests
 
+      - name: Check public seller page
+        run: |
+          python - <<'PY'
+          import requests
+
+          url = "https://www.wildberries.ru/seller/25577"
+          try:
+              r = requests.get(
+                  url,
+                  headers={"User-Agent": "Mozilla/5.0"},
+                  timeout=20,
+              )
+              print("HTTP status:", r.status_code)
+              print("HTML length:", len(r.text))
+              print("HTML preview:", r.text[:300])
+          except Exception as e:
+              print("Request error:", repr(e))
+          PY
+
       - name: Run tracker
         env:
           RUN_ONCE: "1"
-          WB_DEST: "123585931"   # Ханты-Мансийск
+          WB_DEST: "123585931"
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           WB_SELLER_ID: ${{ secrets.WB_SELLER_ID }}
