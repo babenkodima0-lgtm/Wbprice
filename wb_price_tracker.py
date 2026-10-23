@@ -239,8 +239,7 @@ def build_message(item_id, name, old, new):
         )
     return state
 
-def check_once(state):
-    def main():
+def main():
     if not SELLER_ID and not ITEM_IDS:
         raise SystemExit("Укажите WB_SELLER_ID и/или WB_ITEM_IDS")
     state = load_state()
