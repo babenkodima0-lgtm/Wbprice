@@ -205,10 +205,14 @@ def build_message(item_id, name, old, new):
 
 
 # ---------- Основной цикл ----------
-def check_once(state):
     current = fetch_all()
     if not current:
         log.warning("Пустой ответ от WB, пропускаю проверку")
+        send_telegram(
+            "⚠️ <b>Ошибка проверки Wildberries</b>\n"
+            "Не удалось получить товары. Цены не проверены.\n"
+            "Подробности смотри в логах GitHub Actions."
+        )
         return state
 
     first_run = not state
