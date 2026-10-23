@@ -205,7 +205,7 @@ def build_message(item_id, name, old, new):
 
 
 # ---------- Основной цикл ----------
- def check_once(state):
+def check_once(state):
     current = fetch_all()
 
     if not current:
