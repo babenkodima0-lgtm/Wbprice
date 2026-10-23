@@ -37,7 +37,7 @@ STATE_FILE = os.getenv("STATE_FILE", "prices.json")
 RUN_ONCE = os.getenv("RUN_ONCE", "") == "1"  # одна проверка и выход (для GitHub Actions)
 
 # ---------- Эндпоинты (при поломке менять здесь) ----------
-DEST = "-1257786"  # регион доставки (Москва); влияет на цены/наличие
+DEST = "123585931"  # регион доставки (Москва); влияет на цены/наличие
 SELLER_URL = "https://catalog.wb.ru/sellers/v2/catalog"
 CARD_URL = "https://card.wb.ru/cards/v2/detail"
 
