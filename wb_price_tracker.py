@@ -228,8 +228,12 @@ def check_once(state):
     log.info("Проверено товаров: %s, изменений цены: %s", len(current), changes)
     if first_run:
         send_telegram(f"✅ Трекер запущен. Отслеживаю товаров: {len(current)}")
+    elif changes == 0:
+        send_telegram(
+            f"✅ Все цены проверены. Изменений не обнаружено.\n"
+            f"📦 Проверено товаров: {len(current)}"
+        )
     return state
-
 
 def main():
     if not SELLER_ID and not ITEM_IDS:
